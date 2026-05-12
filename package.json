@@ -1,0 +1,11 @@
+{
+  "name": "funny-personality-test",
+  "version": "1.0.0",
+  "description": "超级性格大测试 - 搞笑性格测试网站",
+  "scripts": {
+    "dev": "npx serve . -p 3000",
+    "start": "npx serve . -p 3000"
+  },
+  "keywords": ["personality-test", "funny", "quiz"],
+  "license": "MIT"
+}

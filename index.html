@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PersonaLab - 专业人格测评系统</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧬</text></svg>">
+<style>
+  :root {
+    --primary: #4f46e5;
+    --primary-light: #818cf8;
+    --primary-dark: #3730a3;
+    --accent: #f59e0b;
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --success: #10b981;
+    --radius: 12px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 40px rgba(0,0,0,0.08);
+    --shadow-xl: 0 20px 60px rgba(0,0,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2em;
+    color: var(--primary);
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 18px;
+  }
+
+  .header-badge {
+    font-size: 0.75em;
+    color: var(--text-muted);
+    background: var(--bg);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  /* ===== LAYOUT ===== */
+  .main {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    text-align: center;
+    padding: 60px 20px 50px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    color: #fff;
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .hero h1 {
+    font-size: 2.6em;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--text), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 1.1em;
+    color: var(--text-secondary);
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+
+  .hero-stat {
+    text-align: center;
+  }
+
+  .hero-stat-num {
+    font-size: 1.6em;
+    font-weight: 800;
+    color: var(--primary);
+  }
+
+  .hero-stat-label {
+    font-size: 0.8em;
+    color: var(--text-muted);
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    border: none;
+    padding: 14px 36px;
+    border-radius: 10px;
+    font-size: 1.05em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(79,70,229,0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(79,70,229,0.4);
+  }
+
+  /* ===== FEATURES ===== */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 50px;
+  }
+
+  .feature-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 2em;
+    margin-bottom: 12px;
+  }
+
+  .feature-title {
+    font-weight: 700;
+    font-size: 0.95em;
+    margin-bottom: 6px;
+  }
+
+  .feature-desc {
+    font-size: 0.82em;
+    color: var(--text-muted);
+  }
+
+  /* ===== DEMOGRAPHICS PAGE ===== */
+  .demo-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 40px;
+    box-shadow: var(--shadow);
+  }
+
+  .demo-card h2 {
+    font-size: 1.4em;
+    margin-bottom: 6px;
+  }
+
+  .demo-sub {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-bottom: 32px;
+  }
+
+  .demo-group {
+    margin-bottom: 28px;
+  }
+
+  .demo-label {
+    font-weight: 600;
+    font-size: 0.9em;
+    margin-bottom: 12px;
+    color: var(--text);
+  }
+
+  .gender-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .gender-opt {
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s;
+    background: var(--surface);
+  }
+
+  .gender-opt:hover {
+    border-color: var(--primary-light);
+    background: #f0f0ff;
+  }
+
+  .gender-opt.active {
+    border-color: var(--primary);
+    background: #eef2ff;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+  }
+
+  .gender-opt .g-emoji { font-size: 2.2em; margin-bottom: 6px; }
+  .gender-opt .g-text { font-weight: 600; font-size: 0.95em; }
+
+  .age-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .age-opt {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.88em;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+    font-weight: 500;
+  }
+
+  .age-opt:hover { border-color: var(--primary-light); }
+  .age-opt.active {
+    border-color: var(--primary);
+    background: #eef2ff;
+    color: var(--primary);
+  }
+
+  .btn-start {
+    width: 100%;
+    margin-top: 12px;
+    padding: 16px;
+    font-size: 1.05em;
+  }
+
+  .btn-start:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* ===== QUIZ PAGE ===== */
+  .quiz-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .quiz-progress-text {
+    font-size: 0.85em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .quiz-timer {
+    font-size: 0.82em;
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .quiz-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    box-shadow: var(--shadow);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .quiz-card.fade-out {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+
+  .quiz-card.fade-in {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  .q-category {
+    display: inline-block;
+    background: #eef2ff;
+    color: var(--primary);
+    font-size: 0.75em;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+  }
+
+  .q-number {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .q-text {
+    font-size: 1.2em;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 28px;
+    min-height: 60px;
+  }
+
+  .q-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .q-option {
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.95em;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .q-option::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    transition: width 0.3s;
+    opacity: 0.08;
+  }
+
+  .q-option:hover {
+    border-color: var(--primary-light);
+    background: #fafafe;
+  }
+
+  .q-option.selected {
+    border-color: var(--primary);
+    background: #eef2ff;
+  }
+
+  .q-option.selected::before {
+    width: 100%;
+  }
+
+  .q-option.selected .q-opt-key {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .q-opt-key {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    transition: all 0.2s;
+    position: relative;
+    z-index: 1;
+  }
+
+  .q-opt-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-ghost {
+    background: none;
+    border: 1.5px solid var(--border);
+    color: var(--text-secondary);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.9em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-ghost:hover {
+    border-color: var(--primary-light);
+    color: var(--primary);
+    background: #f8f8ff;
+  }
+
+  .btn-ghost:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .auto-hint {
+    font-size: 0.78em;
+    color: var(--text-muted);
+  }
+
+  /* ===== RESULT / REPORT ===== */
+  .report-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .report-hero {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+    border-radius: var(--radius);
+    color: #fff;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .report-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+    animation: rotate 20s linear infinite;
+  }
+
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .report-hero * { position: relative; z-index: 1; }
+
+  .report-type-code {
+    font-size: 3em;
+    font-weight: 800;
+    letter-spacing: 4px;
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  }
+
+  .report-type-name {
+    font-size: 1.3em;
+    font-weight: 600;
+    opacity: 0.95;
+    margin-bottom: 6px;
+  }
+
+  .report-type-sub {
+    font-size: 0.9em;
+    opacity: 0.75;
+  }
+
+  .report-meta {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .report-meta-item {
+    font-size: 0.8em;
+    opacity: 0.8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .section-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title .s-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9em;
+  }
+
+  .dim-bar-group {
+    margin-bottom: 20px;
+  }
+
+  .dim-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85em;
+    margin-bottom: 6px;
+  }
+
+  .dim-bar-name { font-weight: 600; }
+
+  .dim-bar-pct {
+    font-weight: 700;
+    color: var(--primary);
+  }
+
+  .dim-bar-track {
+    height: 8px;
+    background: var(--bg);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .dim-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+  }
+
+  .dim-bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 6px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 3px;
+  }
+
+  .dim-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72em;
+    color: var(--text-muted);
+    margin-top: 3px;
+  }
+
+  .desc-text {
+    font-size: 0.95em;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+
+  .tag-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.82em;
+    font-weight: 500;
+  }
+
+  .tag-strength {
+    background: #ecfdf5;
+    color: #059669;
+    border: 1px solid #a7f3d0;
+  }
+
+  .tag-weakness {
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+  }
+
+  .tag-career {
+    background: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+  }
+
+  .advice-card {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    background: var(--bg);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+  }
+
+  .advice-icon {
+    font-size: 1.4em;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .advice-content {
+    flex: 1;
+  }
+
+  .advice-title {
+    font-weight: 600;
+    font-size: 0.92em;
+    margin-bottom: 3px;
+  }
+
+  .advice-desc {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .report-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .btn-outline {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #f8f8ff;
+  }
+
+  .radar-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    font-size: 0.8em;
+    color: var(--text-muted);
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    animation: slideUp 0.5s ease forwards;
+  }
+
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+  .hidden { display: none !important; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 1.8em; }
+    .hero-stats { gap: 24px; }
+    .demo-card { padding: 24px; }
+    .quiz-card { padding: 24px; }
+    .report-section { padding: 24px; }
+    .report-type-code { font-size: 2.2em; }
+    .gender-options { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <a class="logo" href="javascript:location.reload()">
+    <div class="logo-icon">P</div>
+    PersonaLab
+  </a>
+  <span class="header-badge">v2.0 专业版</span>
+</header>
+
+<div class="main">
+
+  <!-- ===== PAGE: HOME ===== -->
+  <div id="page-home">
+    <div class="hero">
+      <div class="hero-badge">PERSONALITY ASSESSMENT</div>
+      <h1>发现你的隐藏人格</h1>
+      <p>基于多维度人格模型，通过 20 道精选题目，深度解析你的性格密码，生成专属人格测评报告。</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num">100+</div><div class="hero-stat-label">专业题库</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">测评维度</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">40+</div><div class="hero-stat-label">人格类型</div></div>
+        <div class="hero-stat"><div class="hero-stat-num">3min</div><div class="hero-stat-label">预计用时</div></div>
+      </div>
+      <button class="btn-primary" onclick="showPage('demo')">开始测评 →</button>
+    </div>
+    <div class="features">
+      <div class="feature-card"><div class="feature-icon">🧬</div><div class="feature-title">科学建模</div><div class="feature-desc">基于多维人格理论构建</div></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><div class="feature-title">量化分析</div><div class="feature-desc">五维度雷达图可视化</div></div>
+      <div class="feature-card"><div class="feature-icon">🎯</div><div class="feature-title">精准画像</div><div class="feature-desc">40+人格类型精细匹配</div></div>
+      <div class="feature-card"><div class="feature-icon">📄</div><div class="feature-title">完整报告</div><div class="feature-desc">可下载PDF测评报告</div></div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: DEMOGRAPHICS ===== -->
+  <div id="page-demo" class="hidden">
+    <div class="demo-card animate-in">
+      <h2>基本信息</h2>
+      <p class="demo-sub">请填写以下信息以确保测评结果的准确性</p>
+      <div class="demo-group">
+        <div class="demo-label">您的性别 <span style="color:#dc2626">*</span></div>
+        <div class="gender-options">
+          <div class="gender-opt" data-g="male" onclick="pickGender(this)">
+            <div class="g-emoji">👨</div>
+            <div class="g-text">男性</div>
+          </div>
+          <div class="gender-opt" data-g="female" onclick="pickGender(this)">
+            <div class="g-emoji">👩</div>
+            <div class="g-text">女性</div>
+          </div>
+        </div>
+      </div>
+      <div class="demo-group">
+        <div class="demo-label">您的年龄段</div>
+        <div class="age-options">
+          <div class="age-opt" data-a="18岁以下" onclick="pickAge(this)">18岁以下</div>
+          <div class="age-opt" data-a="18-24岁" onclick="pickAge(this)">18-24岁</div>
+          <div class="age-opt" data-a="25-34岁" onclick="pickAge(this)">25-34岁</div>
+          <div class="age-opt" data-a="35-44岁" onclick="pickAge(this)">35-44岁</div>
+          <div class="age-opt" data-a="45岁以上" onclick="pickAge(this)">45岁以上</div>
+        </div>
+      </div>
+      <button class="btn-primary btn-start" id="btnStart" disabled onclick="startQuiz()">开始测评</button>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: QUIZ ===== -->
+  <div id="page-quiz" class="hidden">
+    <div class="quiz-header">
+      <span class="quiz-progress-text" id="qProgressText">1 / 20</span>
+      <span class="quiz-timer" id="qTimer">00:00</span>
+    </div>
+    <div class="progress-track"><div class="progress-bar" id="qProgressBar" style="width:5%"></div></div>
+    <div class="quiz-card" id="quizCard">
+      <span class="q-category" id="qCategory"></span>
+      <div class="q-number" id="qNumber"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="q-options" id="qOptions"></div>
+      <div class="quiz-nav">
+        <button class="btn-ghost" id="btnBack" onclick="goBack()" disabled>← 上一题</button>
+        <span class="auto-hint">选择后自动跳转</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE: REPORT ===== -->
+  <div id="page-report" class="hidden"></div>
+
+</div>
+
+<footer class="footer">
+  PersonaLab &copy; 2026 &middot; 本测评仅供娱乐参考，不构成任何专业心理建议
+</footer>
+
+<script>
+// ==================== DATA ====================
+const CATEGORIES = ["日常习惯","社交人际","工作学习","消费观念","情感态度","娱乐爱好","人生态度","脑洞想象","生活细节","假设情境"];
+
+const allQuestions = [
+  { id:1,  cat:0, text:"早上闹钟响了，你的第一反应是？", options:["立刻弹起来像弹簧","按掉继续睡到天荒地老","闭着眼摸手机刷半小时","梦游般完成一切然后清醒后崩溃"] },
+  { id:2,  cat:0, text:"吃火锅时你最先涮什么？", options:["直接扔肉，别废话","先放蔬菜假装养生","调蘸料能调半小时","盯着锅等别人先动手"] },
+  { id:3,  cat:0, text:"你洗澡的时候一般在想什么？", options:["人生哲学大问题","复盘今天的社死瞬间","唱歌并觉得自己是歌神","什么都没想，水烫了才反应过来"] },
+  { id:4,  cat:0, text:"出门前照镜子，你通常的反应是？", options:["帅/美到自己都震惊","还行吧，能看","再修五分钟就好","这是我？赶紧关了"] },
+  { id:5,  cat:0, text:"你手机电量到多少会焦虑？", options:["50%就开始找充电器","30%有点慌","10%才开始慌","自动关机了才发现"] },
+  { id:6,  cat:0, text:"深夜饿了你会？", options:["直接煮泡面加两个蛋","翻遍冰箱最后喝了口水","点外卖然后边等边后悔","吃零食吃到罪恶感爆棚"] },
+  { id:7,  cat:0, text:"你叠衣服的方式是？", options:["整整齐齐像商店陈列","团成一团塞进衣柜","挂着不叠，聪明人的方式","堆在椅子上形成衣服山"] },
+  { id:8,  cat:0, text:"下雨天忘带伞你会？", options:["冲就完了，又不是糖做的","等雨停，我是有耐心的人","找人蹭伞，社交能力上线","打电话叫人送，被宠坏了"] },
+  { id:9,  cat:0, text:"你的闹钟通常设几个？", options:["1个，说到做到","3-5个，循序渐进","10个以上，每个间隔1分钟","不设闹钟，自然醒（迟到）"] },
+  { id:10, cat:0, text:"做饭时你的厨房通常是？", options:["干净整洁，做完就洗","有点乱但能接受","像被炸过一样","叫外卖才是正确选择"] },
+  { id:11, cat:1, text:"陌生人跟你搭话你会？", options:["热情回应聊成朋友","礼貌微笑然后找借口走","假装没听到","社恐发作直接跑路"] },
+  { id:12, cat:1, text:"朋友聚会你一般？", options:["组织者本织，全场焦点","来了就吃，吃完就走","角落玩手机的隐形人","找借口不去的鸽王"] },
+  { id:13, cat:1, text:"收到夸奖时你的第一反应？", options:["哪里哪里（内心：继续说）","谢谢（内心：真的吗）","你在讽刺我吧","尴尬到脚趾抠出三室一厅"] },
+  { id:14, cat:1, text:"你的朋友圈/社交动态？", options:["天天发，生活记录达人","偶尔发，精心修图后","三个月发一条，还秒删","只看不发，潜水冠军"] },
+  { id:15, cat:1, text:"别人借你东西不还你会？", options:["直接开口要回来","暗示暗示再暗示","算了就当送了","在心里记一辈子"] },
+  { id:16, cat:1, text:"跟朋友吵架后你会？", options:["先道歉，友谊第一","等对方先低头","冷战到天荒地老","当什么都没发生过"] },
+  { id:17, cat:1, text:"群聊里你的角色是？", options:["话题发起者和气氛担当","表情包大户","偶尔冒泡的路人","从不发言的截图党"] },
+  { id:18, cat:1, text:"有人插队你会？", options:["勇敢站出来制止","内心愤怒但不敢说","默默在心里诅咒","无所谓，反正也不急"] },
+  { id:19, cat:1, text:"你回消息的速度？", options:["秒回，手机从不离手","几分钟到几小时不等","看心情，可能隔天回","已读不回是艺术"] },
+  { id:20, cat:1, text:"被邀请参加不熟的人的婚礼？", options:["去！有热闹为什么不凑","看有没有好吃的再决定","随份子钱但人不去","装没看到这条消息"] },
+  { id:21, cat:2, text:"DDL前一晚你在干嘛？", options:["早就做完了在追剧","正在疯狂赶工中","觉得还来得及继续躺","已经放弃等补考/重做"] },
+  { id:22, cat:2, text:"开会时你一般？", options:["积极发言表现自己","认真听但不说话","在桌子底下玩手机","灵魂出窍神游太空"] },
+  { id:23, cat:2, text:"你的桌面（电脑+物理）？", options:["井井有条，分门别类","有点乱但我知道在哪","打开文件夹像开盲盒","桌面上的东西已经考古级别"] },
+  { id:24, cat:2, text:"领导/老师突然找你谈话？", options:["镇定自若走过去","内心疯狂复盘哪里出了问题","吓出一身冷汗","先想好辞职/退学的理由"] },
+  { id:25, cat:2, text:"摸鱼时你最常做的事？", options:["刷短视频停不下来","逛购物网站加购物车","跟同事/同学聊天","发呆思考人生意义"] },
+  { id:26, cat:2, text:"团队作业中你通常？", options:["主动当组长统筹全局","认真完成分配的部分","划水摸鱼等别人带","交之前才想起来有这事"] },
+  { id:27, cat:2, text:"工作中遇到不会的问题？", options:["Google/Baidu一顿猛搜","问同事不耻下问","自己死磕到崩溃","战略性跳过这道题"] },
+  { id:28, cat:2, text:"你的待办清单？", options:["每天更新严格执行","写了但经常忘记看","写了一堆完成不了","清单是什么？能吃吗"] },
+  { id:29, cat:2, text:"周一早上的状态？", options:["元气满满新的一周","还行吧，需要咖啡续命","生无可恋想辞职","已经计划好周五怎么浪"] },
+  { id:30, cat:2, text:"加班时你的态度？", options:["没问题，奋斗最光荣","可以接受但要有加班费","表面OK内心MMP","到点就走谁也别拦我"] },
+  { id:31, cat:3, text:"发了工资第一件事？", options:["存起来！先存后花","还花呗/信用卡","买买买犒劳自己","先看看够不够活到下个月"] },
+  { id:32, cat:3, text:"双十一你的状态？", options:["提前一个月做功课列清单","当天随便逛逛捡便宜","付完款就后悔系列","完全不参与，理性消费者"] },
+  { id:33, cat:3, text:"跟朋友AA制你怎么看？", options:["AA最公平，支持","我请吧（偶尔）","看情况，关系好的我请","每次都让别人请（不是）"] },
+  { id:34, cat:3, text:"看到喜欢的东西但很贵？", options:["买！人生苦短及时行乐","纠结三天三夜再决定","收藏等打折","看看就好，拍个照走人"] },
+  { id:35, cat:3, text:"你的记账习惯？", options:["每笔都记清清楚楚","大概记个数","偶尔想起来记一下","记账？钱花了就花了"] },
+  { id:36, cat:3, text:"借给朋友钱你的态度？", options:["二话不说直接转","看金额和关系再决定","找借口说没有","从不借钱给任何人"] },
+  { id:37, cat:3, text:"买奶茶的频率？", options:["一天一杯是基本操作","一周两三杯犒劳自己","偶尔喝喝","奶茶有什么好喝的"] },
+  { id:38, cat:3, text:"你的消费观？", options:["该省省该花花，理性消费","及时行乐，活在当下","能省则省，一毛钱掰两半花","月光族，钱不够花"] },
+  { id:39, cat:3, text:"超市购物你会？", options:["列好清单精准采购","逛到什么买什么","只买打折的","进去买一瓶水出来拎三袋"] },
+  { id:40, cat:3, text:"朋友过生日你送什么？", options:["精心准备的礼物","红包最实在","现买现送不走心","生日？什么生日？"] },
+  { id:41, cat:4, text:"喜欢一个人你会？", options:["主动出击表白","暗示暗示再暗示","默默关注不敢行动","假装不在意其实在意得要死"] },
+  { id:42, cat:4, text:"约会时你最在意什么？", options:["对方开不开心","自己看起来好不好","吃什么去哪里玩","别冷场别尴尬就行"] },
+  { id:43, cat:4, text:"吵架时你的态度？", options:["就事论事解决问题","先冷静再说","我的错也是你的错","冷处理不说话"] },
+  { id:44, cat:4, text:"你觉得恋爱中最重要的是？", options:["信任和沟通","浪漫和仪式感","三观一致","长得好看（不是）"] },
+  { id:45, cat:4, text:"被表白时你的反应？", options:["高兴到飞起","冷静分析合不合适","紧张到说不出话","怀疑对方在玩真心话大冒险"] },
+  { id:46, cat:4, text:"异地恋你能接受吗？", options:["真爱不怕距离","看情况，看对方值不值得","太难了，不太能接受","不可能，我要人陪"] },
+  { id:47, cat:4, text:"收到对象的早安晚安？", options:["甜蜜回复并加爱心","回一个同样的","已读但觉得没什么","感动到截图保存"] },
+  { id:48, cat:4, text:"单身时你怎么看情侣？", options:["祝福！（酸）","无所谓各过各的","疯狂羡慕但不想主动","看见就想翻白眼"] },
+  { id:49, cat:4, text:"你理想中的约会是？", options:["看电影逛街浪漫晚餐","宅在家打游戏看剧","户外运动冒险刺激","只要在一起做什么都行"] },
+  { id:50, cat:4, text:"分手后你会？", options:["删掉所有联系方式断干净","留着但不联系","做朋友没问题","时不时翻翻对方朋友圈"] },
+  { id:51, cat:5, text:"周末你最常做的事？", options:["宅在家追剧打游戏","出门浪社交达人","运动健身自律达人","睡觉睡到自然醒"] },
+  { id:52, cat:5, text:"KTV里你是什么角色？", options:["麦霸！每首都要唱","等别人唱完自己再上","只唱自己会的那一首","在角落吃果盘的吃货"] },
+  { id:53, cat:5, text:"追剧时你的状态？", options:["一口气看完才罢休","每天追更新雷打不动","攒到完结再看","看两集就弃了换下一部"] },
+  { id:54, cat:5, text:"你的歌单风格？", options:["什么都听杂食动物","只听一个类型","跟着排行榜走","随机播放听天由命"] },
+  { id:55, cat:5, text:"打游戏你是什么类型？", options:["胜负欲超强必须赢","休闲玩家开心就好","又菜又爱玩","只看别人打的云玩家"] },
+  { id:56, cat:5, text:"看综艺时你会？", options:["笑到邻居投诉","默默微笑很矜持","分析节目效果和剪辑","看弹幕比看节目多"] },
+  { id:57, cat:5, text:"你最想去的地方？", options:["海边度假躺平","名胜古迹打卡","主题乐园疯玩","家里哪也不去"] },
+  { id:58, cat:5, text:"拍照时你的风格？", options:["疯狂自拍选最美的","别人拍的我都不满意","只拍风景不拍人","能不拍就不拍"] },
+  { id:59, cat:5, text:"看电影你喜欢？", options:["必须去电影院体验","在家投屏也很香","手机小屏也能看","只看解说不看原片"] },
+  { id:60, cat:5, text:"你养宠物吗/想养吗？", options:["必须养！猫狗双全","想养但条件不允许","养了但有时后悔","不想养太麻烦了"] },
+  { id:61, cat:6, text:"你觉得人生最重要的是？", options:["开心快乐就好","事业有成出人头地","家人朋友健康","有钱有钱还是有钱"] },
+  { id:62, cat:6, text:"遇到困难时你会？", options:["正面刚不怕困难","先分析再行动","找人帮忙","逃避虽然可耻但有用"] },
+  { id:63, cat:6, text:"你怎么看待规则？", options:["规则就是用来遵守的","合理的遵守不合理的改","能钻空子就钻","规则是死的人是活的"] },
+  { id:64, cat:6, text:"你的时间观念？", options:["从不迟到守时达人","偶尔迟到几分钟","经常迟到但有借口","迟到半小时算准时"] },
+  { id:65, cat:6, text:"你怎么看待运气？", options:["运气是实力的一部分","三分天注定七分靠打拼","我运气一直不太好","锦鲤体质自带光环"] },
+  { id:66, cat:6, text:"你做决定的方式？", options:["果断利落不纠结","反复权衡利弊","听别人的意见","抛硬币决定命运"] },
+  { id:67, cat:6, text:"你怎么看待失败？", options:["失败是成功之母","虽然难受但会站起来","一次失败就怀疑人生","无所谓失败不失败"] },
+  { id:68, cat:6, text:"你的口头禅是？", options:["没问题/可以的","随便/都行","算了/无所谓","真的假的/不会吧"] },
+  { id:69, cat:6, text:"你怎么看待内卷？", options:["卷起来！竞争才有进步","适度卷，别太累","反对内卷要躺平","卷不卷随缘吧"] },
+  { id:70, cat:6, text:"你觉得自己是？", options:["乐观主义者","现实主义者","悲观主义者","间歇性乐观持续性悲观"] },
+  { id:71, cat:7, text:"如果变成动物你想当？", options:["猫，天天躺平被伺候","鹰，自由翱翔天际","海豚，聪明又可爱","树懒，慢生活代言人"] },
+  { id:72, cat:7, text:"如果有时光机你想去？", options:["未来，看看自己混得怎样","古代，体验不一样的生活","回到小时候重来一次","哪也不去现在挺好的"] },
+  { id:73, cat:7, text:"如果你有超能力？", options:["读心术，知道别人在想什么","隐身，想干嘛就干嘛","飞行，省了机票钱","时间暂停，多睡一会儿"] },
+  { id:74, cat:7, text:"如果你是食物你觉得你是？", options:["火锅，百搭又热闹","冰淇淋，甜到心里","榴莲，爱的人很爱恨的人很恨","白米饭，平淡但不可或缺"] },
+  { id:75, cat:7, text:"外星人来了你第一反应？", options:["冲上去打招呼","先拍照发朋友圈","赶紧跑路","问他们要不要办会员卡"] },
+  { id:76, cat:7, text:"如果只能吃一种食物一辈子？", options:["火锅！永远的神","米饭配菜，百吃不厌","面食，变着花样来","烧烤，人间值得"] },
+  { id:77, cat:7, text:"如果你中了彩票一千万？", options:["先辞职再说","买房买车投资","存起来继续上班","先冷静三天确认不是做梦"] },
+  { id:78, cat:7, text:"你觉得你的前世是？", options:["某国王子/公主","江湖侠客","普通老百姓","一只快乐的小动物"] },
+  { id:79, cat:7, text:"如果世界末日明天到来？", options:["跟家人朋友在一起","疯狂做以前不敢做的事","该吃吃该喝喝","发最后一条朋友圈"] },
+  { id:80, cat:7, text:"你觉得自己像哪个季节？", options:["春天，温暖又有活力","夏天，热情似火","秋天，成熟稳重","冬天，高冷但有内涵"] },
+  { id:81, cat:8, text:"你挤牙膏的方式？", options:["从底部往上挤","从中间挤","哪里方便挤哪里","用完直接扔换新的"] },
+  { id:82, cat:8, text:"你睡觉的姿势？", options:["仰躺，手脚摊开大字型","侧卧，蜷成一团","趴着睡","翻来覆去哪种都行"] },
+  { id:83, cat:8, text:"你的wifi密码一般是？", options:["复杂到自己都记不住","手机号或生日","12345678或admin","不设密码大方分享"] },
+  { id:84, cat:8, text:"你怎么剥橘子？", options:["一瓣一瓣优雅地吃","直接掰开大口吃","剥皮剥半天然后一口吞","让别人剥好喂我"] },
+  { id:85, cat:8, text:"上厕所你一般干嘛？", options:["速战速决什么都不带","刷手机半小时起步","看沐浴露背面的成分表","思考人生重大决策"] },
+  { id:86, cat:8, text:"你的手机壳多久换一次？", options:["经常换，当配饰用","脏了破了才换","一个壳用到手机退休","不带手机壳，原装最美"] },
+  { id:87, cat:8, text:"你用筷子的方式？", options:["标准姿势教科书级别","能夹起来就行","有点奇怪但能用","经常夹不住东西掉桌上"] },
+  { id:88, cat:8, text:"你打字的速度？", options:["飞快，盲打无压力","还行，偶尔看键盘","比较慢但准确率高","一个指头戳屏幕"] },
+  { id:89, cat:8, text:"坐电梯时你一般？", options:["站好等开门","看手机","盯着楼层数字","跟陌生人尬聊"] },
+  { id:90, cat:8, text:"你的袜子一般？", options:["成双成对整整齐齐","能找到两只差不多的就行","经常穿不成对的","破洞了还在穿"] },
+  { id:91, cat:9, text:"如果能跟一个人交换人生一天？", options:["富豪体验一下有钱的快乐","明星感受一下万众瞩目","普通人看看别人怎么活","不换，自己的人生最好"] },
+  { id:92, cat:9, text:"如果你的房间着火了只能拿一样东西？", options:["手机，没它活不了","钱包/证件","有纪念意义的东西","赶紧跑什么都不要了"] },
+  { id:93, cat:9, text:"如果你能隐身一天？", options:["去超市免费吃喝","偷偷听别人怎么说我","去旅游景点不排队","在家隐身看电视有什么区别"] },
+  { id:94, cat:9, text:"如果你变成了异性一天？", options:["体验不一样的人生","看看异性澡堂（不是）","理解一下对方的辛苦","赶紧变回来我不要"] },
+  { id:95, cat:9, text:"如果你能跟动物对话？", options:["问问猫主子到底满不满意","跟狗子说我很爱它","问问鸟儿飞是什么感觉","警告蚊子别再咬我了"] },
+  { id:96, cat:9, text:"如果你突然变小只有10厘米？", options:["骑着猫当坐骑","住在娃娃屋里","在办公桌上跑酷","太可怕了赶紧变回来"] },
+  { id:97, cat:9, text:"如果你能穿越到任何一本书里？", options:["武侠世界当大侠","魔法世界学魔法","科幻世界开飞船","童话世界当主角"] },
+  { id:98, cat:9, text:"如果你能拥有一项永久buff？", options:["怎么吃都不胖","怎么熬夜都不累","怎么花钱都有钱","怎么睡都不够（不是）"] },
+  { id:99, cat:9, text:"如果你是一首歌你觉得是？", options:["《好日子》喜庆热闹","《孤勇者》热血沸腾","《平凡之路》低调深沉","《忐忑》让人摸不着头脑"] },
+  { id:100,cat:9, text:"最后，你觉得这个测试？", options:["太准了！你是怎么做到的","有点意思但不太准","纯属娱乐但挺好玩","我是来摸鱼的不是来被扎心的"] }
+];
+
+// ==================== RESULTS ====================
+const resultsMale = [
+  { code:"ST♂", name:"钢铁直男天花板", emoji:"🗿", sub:"纯直 · 木头系", desc:"恭喜你，你已经把直男属性点满了。你分不清口红色号，觉得粉色就是粉色，玫红也是粉色。你女朋友说「随便」的时候你真的随便了，然后你就没有女朋友了。你的人生信条是：浪漫能吃吗？不如加个鸡腿。", traits:["逻辑清晰但情商掉线","实用主义至死","暗示接收器已损坏","砍价之王"], dating:"约会时你会问「吃了吗」作为开场白，送礼物首选实用型——比如保温杯。你觉得说「多喝热水」是最高级别的关心。", catchphrase:"「你要这么想我也没办法」", advice:[{t:"恋爱急救",d:"学会区分「我没事」和「我真的没事」的区别，前者是真的没事，后者是你药丸。"},{t:"浪漫速成",d:"记住三个日子：生日、纪念日、情人节。做到这三点你就能超越80%的直男。"},{t:"沟通升级",d:"当她说「你忙吧」的时候，千万别真的去忙。"}] },
+  { code:"G·攻", name:"纯1号霸总", emoji:"👑", sub:"攻气全开 · 领袖型", desc:"你的气场两米八，走路自带BGM。你是那种一进教室所有人的目光都会被你吸引的存在。你习惯照顾人、保护人，你的占有欲强到连对方的猫都想管。你的人生格言：我的人，谁都不能碰。", traits:["天生领袖气质","保护欲爆棚","占有欲MAX","决策果断"], dating:"恋爱中你是主导方，从约会地点到吃什么全你说了算。你会霸道地把外套披在对方身上，然后自己冻得瑟瑟发抖。", catchphrase:"「别动，我来」", advice:[{t:"控制欲管理",d:"霸道是魅力，但控制是窒息。学会给对方空间，信任比监控更有力量。"},{t:"示弱练习",d:"偶尔在对方面前展示脆弱，不需要永远当超人，你也是普通人。"},{t:"倾听升级",d:"做决定前先问问对方的想法，两个人的世界不需要独裁者。"}] },
+  { code:"G·受", name:"纯0号小甜心", emoji:"🍬", sub:"软萌系 · 被保护型", desc:"你甜起来连奶茶都要叫你前辈。你的撒娇技术已经炉火纯青，一个「哼」字就能让人心都化了。你喜欢被照顾、被宠溺，你的理想型是那种能把你扛在肩上走的人。你是恋爱中的小公主，性别男，公主心。", traits:["撒娇天赋满点","软萌可爱","依赖感强","情绪敏感"], dating:"恋爱中你喜欢被主导，对方说什么你都说好。你会在冷的时候主动缩进对方怀里，然后说「你怎么才来」。", catchphrase:"「人家不嘛～」", advice:[{t:"独立性提升",d:"软萌是加分项，但也要有自己的主见，偶尔做一次决定会让你更有魅力。"},{t:"情绪表达",d:"不开心的时候直接说，不要用「哼」和沉默来暗示，你的另一半不是读心术大师。"},{t:"自信建设",d:"你值得被爱，不需要用撒娇来换取关注，真实的你同样可爱。"}] },
+  { code:"G·0.5", name:"全能选手", emoji:"🔄", sub:"灵活切换 · 双面型", desc:"你是恋爱界的变形金刚，能攻能守能上能下。今天可能是霸道总裁，明天就变成小奶狗。你的另一半永远猜不透你今天是什么模式，这种神秘感就是你的杀手锏。你的人生哲学：看心情。", traits:["角色切换自如","适应力极强","神秘感十足","情绪多变"], dating:"恋爱中你没有固定角色，有时候主动有时候被动。你的另一半经常需要重新认识你，但这种新鲜感让感情永远不腻。", catchphrase:"「今天我做主/今天听你的」", advice:[{t:"稳定输出",d:"偶尔给对方一个确定感，不是所有人都适应每天开盲盒的恋爱模式。"},{t:"沟通频率",d:"切换角色时跟对方说一声，不然对方会以为你生气了。"},{t:"自我认知",d:"了解自己在什么状态下最舒服，不要为了切换而切换。"}] },
+  { code:"BN🐶", name:"奶狗本狗", emoji:"🐶", sub:"粘人型 · 忠犬系", desc:"你就是行走的小奶狗，粘人程度五颗星。你恨不得24小时挂在对方身上，消息必须秒回，电话必须接，不回消息你就开始脑补对方是不是出车祸了。你的爱像洪水一样汹涌，就是有时候会把人淹到。", traits:["粘人指数爆表","忠诚度满分","醋王本王","安全感缺失"], dating:"你会在对方每条朋友圈下点赞评论，走到哪都想牵手。对方跟异性说一句话你就能脑补出一部80集连续剧。", catchphrase:"「你在干嘛？跟谁？在哪？」", advice:[{t:"安全感建设",d:"安全感不是对方给的，是自己建的。培养自己的兴趣爱好，不要把所有快乐都寄托在一个人身上。"},{t:"信任练习",d:"对方不回消息可能只是在忙，不一定是不爱你了。深呼吸，放下手机。"},{t:"空间意识",d:"恋爱是两个人的事，但每个人都需要独处的时间，距离产生美不是说说而已。"}] },
+  { code:"WD🐺", name:"狼狗男友", emoji:"🐺", sub:"野性型 · 荷尔蒙", desc:"你的荷尔蒙浓度高到可以让方圆十米的人都感受到。你酷、帅、man，走路带风，眼神带电。你是那种不需要说话就能让人心跳加速的存在。你的魅力是原始的、野性的、无法抗拒的。", traits:["荷尔蒙爆棚","酷帅有型","行动派","不善言辞"], dating:"你不擅长说甜言蜜语，但你会用行动表达。下雨天直接把外套脱下来披上，生病了直接买药送上门，你的情话都写在行动里。", catchphrase:"「嗯。」「知道了。」「走。」", advice:[{t:"语言表达",d:"行动很重要，但偶尔也需要说出来。一句「我想你了」比送十杯奶茶都管用。"},{t:"情绪释放",d:"不需要永远保持酷盖形象，偶尔示弱反而更有魅力。"},{t:"浪漫升级",d:"偶尔制造一些小惊喜，不需要多大，一张手写卡片就够了。"}] },
+  { code:"TM🐶", name:"舔狗至尊", emoji:"🐕", sub:"卑微型 · 付出者", desc:"你的爱情字典里没有「尊严」两个字。你可以凌晨三点去给对方送夜夜宵，可以在大雨里等两个小时，可以花半个月工资买一个包。你的付出感天动地，就是对方可能觉得理所当然。", traits:["付出不计回报","卑微到尘土","自我感动达人","底线模糊"], dating:"你会记住对方说过的每一句话，然后默默去实现。对方随口说想吃草莓，你第二天就出现在楼下。你的备注是对方的小名加上爱心emoji。", catchphrase:"「没关系，我都可以」「你开心就好」", advice:[{t:"底线意识",d:"爱一个人没有错，但不能丢了自己。设定底线，不是所有付出都值得。"},{t:"双向奔赴",d:"好的爱情是双向的，如果你一直在付出而对方一直在接受，那不是爱情，是慈善。"},{t:"自我价值",d:"你值得被同等对待，不要用卑微来换取爱情，那样换来的不是爱，是同情。"}] },
+  { code:"PX😎", name:"普信男本男", emoji:"😏", sub:"自信型 · 无畏者", desc:"你对自己的颜值和魅力有着迷之自信。你觉得自己帅到没朋友（确实没朋友），你认为所有异性都对你有意思（并没有）。你的自信程度能让太阳都黯然失色，你的自知之明约等于零。", traits:["自信到离谱","自知之明缺失","社交牛逼症","脸皮比城墙厚"], dating:"你会觉得自己配得上任何人，包括校花。你主动搭讪的方式是「我觉得你挺好看的，我也是」。你从不觉得自己有问题，问题都在别人身上。", catchphrase:"「我觉得我挺好的啊」", advice:[{t:"自我认知",d:"自信是好事，但自大是毒药。偶尔照照镜子，客观评估一下自己。"},{t:"倾听反馈",d:"如果所有人都觉得你有问题，那可能你真的有问题。"},{t:"谦逊修炼",d:"真正的自信不需要炫耀，低调的人反而更有魅力。"}] },
+  { code:"MB👦", name:"妈宝男本宝", emoji:"👶", sub:"依赖型 · 巨婴系", desc:"你的人生大事都要问妈妈的意见。穿什么衣服问妈妈，吃什么饭问妈妈，交什么女朋友也要问妈妈。你的口头禅是「我妈说」，你的理想型是「像我妈那样的」。你不是在找女朋友，你是在找第二个妈。", traits:["妈妈的话永远对","生活自理能力弱","决策依赖性强","安全感来自妈妈"], dating:"约会时你会不自觉地提到「我妈做的更好吃」。吵架时你的解决方案是「我问问我妈」。你的另一半和你妈同时掉水里，你会先问你妈的意见。", catchphrase:"「我妈说了……」", advice:[{t:"独立意识",d:"你已经是成年人了，有些决定可以自己做。从小事开始，比如今天穿什么不用问妈妈。"},{t:"边界建立",d:"孝顺是美德，但恋爱是两个人的事。学会在妈妈和另一半之间找到平衡。"},{t:"成长宣言",d:"试着一个人做一次重大决定，你会发现天不会塌下来。"}] },
+  { code:"ZR🤮", name:"直男癌晚期", emoji:"🤢", sub:"封建型 · 活化石", desc:"你的思想停留在清朝。你觉得女生就该做饭带孩子，你觉得女生穿短裙就是不正经，你觉得女生化妆是给男生看的。你的性别观能让女权主义者当场气到升天。你以为自己是大男子主义，其实你只是大男子。", traits:["性别观停留在清朝","物化女性","自我中心","爹味十足"], dating:"你会对女朋友说「女生读那么多书干嘛」，你会限制女朋友的社交，你觉得女朋友的闺蜜都是坏人。你以为这是关心，其实这是控制。", catchphrase:"「我是为你好」「女生就应该……」", advice:[{t:"思想升级",d:"21世纪了，建议格式化一下你的性别观，安装一个最新版本。"},{t:"尊重意识",d:"女性不是附属品，她们有自己的想法、事业和人生。尊重是一切关系的基础。"},{t:"自我反思",d:"如果你觉得所有女生都有问题，那问题可能在你身上。"}] },
+  { code:"ZNR💔", name:"渣男教科书", emoji:"💔", sub:"海王型 · 时间管理大师", desc:"你的时间管理能力让罗志祥都自愧不如。你同时聊着五个暧昧对象，每个都叫宝贝，每个都觉得你是真心的。你的甜言蜜语像复读机一样循环播放，你的承诺比泡沫还容易碎。你是恋爱界的快餐店——来者不拒，吃完就走。", traits:["时间管理大师","甜言蜜语复读机","暧昧对象排班表","承诺过敏体质"], dating:"你手机里有三个微信，每个微信有不同的女朋友。你擅长在不同人面前扮演不同角色，你的演技足以拿金鸡奖。", catchphrase:"「你是我见过最特别的」「我们只是朋友」", advice:[{t:"道德重启",d:"如果同时喜欢两个人，选第二个。因为如果你真的喜欢第一个，就不会喜欢第二个。"},{t:"换位思考",d:"如果你的女朋友同时跟五个人暧昧，你会怎么想？己所不欲勿施于人。"},{t:"真诚练习",d:"试着对一个人认真，你会发现专一的快乐比暧昧的刺激更持久。"}] },
+  { code:"QH🎤", name:"情话boy", emoji:"🌹", sub:"浪漫型 · 甜言蜜语", desc:"你的情话技能已经点满。你能让任何人心跳加速，你的每一句话都像是从偶像剧里抄来的。你浪漫起来连蜡烛都自愧不如，你的情书能让语文老师都感动落泪。但问题是——你对谁都这样。", traits:["情话张口就来","浪漫细胞过剩","暧昧不分对象","真心难以辨别"], dating:"你的情话库比新华字典还厚，你能在三秒内想出十个撩人的句子。但你的真心话和套路话混在一起，连你自己都分不清了。", catchphrase:"「你知道你和星星的区别吗？星星在天上，你在我心里」", advice:[{t:"真诚过滤",d:"说情话之前先问自己：这句话我是真心的还是套路的？真诚的情话比套路更动人。"},{t:"对象专一",d:"浪漫是好东西，但请限定使用对象。对所有人都浪漫等于对所有人都不浪漫。"},{t:"深度交流",d:"偶尔聊聊人生、理想、未来，比一百句情话更能打动人心。"}] },
+  { code:"NR🐶", name:"小奶狗学弟", emoji:"🐩", sub:"年下型 · 可爱系", desc:"你是校园里最可爱的存在。你笑起来有酒窝，说话声音软软的，撒娇起来让人心都化了。你崇拜你的另一半，觉得对方什么都是对的。你是恋爱中的学弟，永远在仰望你的学长/学姐。", traits:["可爱到犯规","崇拜感满满","依赖性极强","保护欲缺失"], dating:"你会用星星眼看着对方，觉得对方做什么都好帅/好美。你会主动给对方带早餐，会在对方考试前发加油信息，你的爱纯粹又温暖。", catchphrase:"「学长/学姐好厉害！」", advice:[{t:"平等意识",d:"恋爱是平等的，不需要仰望任何人。你也有自己的闪光点，自信一点。"},{t:"独立发展",d:"不要把所有时间都围着对方转，你也有自己的学业和人生要经营。"},{t:"成长陪伴",d:"最好的关系是一起成长，而不是一个人拖着另一个人走。"}] },
+  { code:"LG👔", name:"老干部男友", emoji:"📚", sub:"稳重型 · 正经系", desc:"你严肃得像个教导主任。你的约会项目是逛博物馆和看纪录片，你送的礼物是字典和学习资料，你的浪漫是在对方生日时写一篇500字的议论文。你的人生没有惊喜，只有计划表。", traits:["严肃正经","缺乏浪漫","计划性极强","生活无趣"], dating:"你的约会流程是：吃饭-散步-送回家，雷打不动。你觉得牵手已经是极限了，接吻需要打申请报告。你的浪漫是帮对方整理笔记。", catchphrase:"「我们应该有计划地谈恋爱」", advice:[{t:"放松练习",d:"偶尔做一件计划外的事，比如突然出现在对方面前，你会发现惊喜比计划更有趣。"},{t:"浪漫入门",d:"浪漫不需要花很多钱，一束野花、一封手写信、一个突然的拥抱，就够了。"},{t:"情感释放",d:"允许自己偶尔不正经，你的人生不需要永远按部就班。"}] },
+  { code:"JY🐟", name:"人间清醒摆烂王", emoji:"🐟", sub:"佛系型 · 躺平大师", desc:"你看透了爱情的本质，然后选择了不谈恋爱。你觉得恋爱太麻烦了，还不如打游戏。你的朋友都在脱单，你在脱装备。你不是找不到对象，你是不想找。你的人生哲学：单身一时爽，一直单身一直爽。", traits:["看透红尘","懒到极致","游戏大于恋爱","自我安慰大师"], dating:"你的恋爱经历约等于零，但你对此毫不在意。你会在朋友秀恩爱的时候默默打开游戏，然后说「真香」。", catchphrase:"「恋爱有什么好的，游戏不香吗？」", advice:[{t:"开放心态",d:"不谈恋爱没问题，但不要因为害怕受伤就封闭自己。爱情虽然麻烦，但也很美好。"},{t:"社交拓展",d:"多参加线下活动，不是为了找对象，而是为了打开自己的世界。"},{t:"自我提升",d:"把单身的时间用来提升自己，等你变得足够优秀，爱情自然会来敲门。"}] },
+  { code:"BH🎭", name:"戏精男友", emoji:"🎭", sub:"表演型 · 偶像剧男主", desc:"你的人生就是一部偶像剧，你是永远的男主角。别人一句无心的话你能脑补出八十集剧情，一个眼神你能解读出千言万语。你的内心戏比电影院还丰富，你的表情包库存比微信官方还全。", traits:["内心戏影帝","脑补能力满分","情绪波动大","戏剧性人格"], dating:"你会因为对方没回消息而脑补出「ta是不是不爱我了→ta是不是有别人了→我要不要分手→不行我舍不得」的完整剧情。然后对方只是手机没电了。", catchphrase:"「你是不是不爱我了？」", advice:[{t:"减少脑补",d:"不是每件事都有深层含义，有时候对方没回消息真的只是在忙。"},{t:"情绪管理",d:"学会控制情绪的音量，不是所有事都值得你演一出大戏。"},{t:"真实表达",d:"与其脑补一百种可能，不如直接问一句。沟通比猜测有效一万倍。"}] },
+  { code:"XL🤝", name:"中央空调暖男", emoji:"🌡️", sub:"博爱型 · 暖气片", desc:"你对谁都好，好到让人分不清你到底是暖还是渣。你会给每个女生带早餐，会在每个女生难过的时候递纸巾，你会在每个女生的朋友圈下评论「你真好看」。你以为你是暖男，其实你是中央空调——暖所有人，凉了真心人。", traits:["博爱无差别","边界感模糊","好人卡收集者","暧昧制造机"], dating:"你对女朋友和对其他女生的态度一模一样，你女朋友问你「你对她是不是也这样」的时候，你诚实地说「是」，然后你就没有女朋友了。", catchphrase:"「我对朋友都这样啊」", advice:[{t:"边界意识",d:"对女朋友好和对朋友好要有区别，你需要学会划清界限。"},{t:"专一练习",d:"把你对所有人的好集中给一个人，你会发现效果好十倍。"},{t:"换位思考",d:"如果你女朋友对每个男生都这么好，你能接受吗？"}] },
+  { code:"KC💪", name:"健身狂魔男友", emoji:"💪", sub:"自律型 · 肌肉系", desc:"你的生活只有两件事：健身和吃蛋白粉。你的约会地点是健身房，你送的礼物是蛋白粉，你的浪漫是一起做深蹲。你觉得体脂率比情商重要，你的人生格言是「没有腹肌的人不配谈恋爱」。", traits:["健身成瘾","蛋白粉依赖","约会约在健身房","体脂率至上"], dating:"你会在约会时计算每一顿饭的卡路里，你会在对方吃炸鸡的时候说「你知道这个有多少热量吗」。你觉得一起跑步是最浪漫的事。", catchphrase:"「今天练了吗？」", advice:[{t:"生活平衡",d:"健身是好习惯，但不要让它绑架你的生活和恋爱。偶尔吃一顿炸鸡不会怎样。"},{t:"浪漫升级",d:"约会不一定要在健身房，偶尔去看个电影吃个火锅，也是很好的约会。"},{t:"关注内在",d:"身材是加分项，但真正吸引人的是你的内在。花点时间提升情商比练腹肌更有用。"}] },
+  { code:"ZK🤓", name:"学术宅男", emoji:"🤓", sub:"知识型 · 书呆子", desc:"你的人生90%在图书馆和实验室度过。你的浪漫是给对方写一篇论文致谢，你的情话是「你是我研究方向以外最大的兴趣」。你不懂社交，不懂穿搭，但你懂量子力学。你觉得GPA比恋爱重要。", traits:["学术至上","社交能力为零","穿搭灾难","浪漫绝缘体"], dating:"你的约会是去图书馆自习，你的情书是用LaTeX排版的，你的求婚词可能是「你愿意成为我论文的第二作者吗」。", catchphrase:"「等我看完这一章」", advice:[{t:"社交入门",d:"偶尔离开图书馆，参加一些社交活动。你的知识很丰富，但也需要学会跟人交流。"},{t:"穿搭升级",d:"找一个会穿搭的朋友帮你改造一下，外表的提升会带来意想不到的自信。"},{t:"浪漫入门",d:"偶尔放下论文，给对方一个拥抱。有些事情不需要公式来计算。"}] },
+  { code:"SW🕺", name:"社交牛逼症患者", emoji:"🕺", sub:"社交型 · 人来疯", desc:"你跟谁都能聊起来，跟谁都像认识了十年。你的通讯录有2000人，你叫得出500个人的名字，你跟100个人称兄道弟，但真正能借到钱的只有3个。你是社交场上的永动机，永远精力充沛。", traits:["社交能力MAX","人脉广泛","表面兄弟多","独处恐惧症"], dating:"你会在约会时遇到十个熟人，然后花半小时跟每个人寒暄。你的另一半觉得自己是你的背景板。你的朋友圈每天发三条，每条都有不同的定位。", catchphrase:"「哎这不是那谁吗！」", advice:[{t:"质量>数量",d:"2000个点赞之交不如5个知心好友。把精力放在值得的关系上。"},{t:"独处能力",d:"学会享受独处，不需要时刻跟人在一起。独处是了解自己的最好方式。"},{t:"深度关系",d:"试着跟一个人深入交流，而不是跟十个人浅尝辄止。深度比广度更有价值。"}] }
+];
+
+const resultsFemale = [
+  { code:"GL♀", name:"纯T大佬", emoji:"😎", sub:"攻气型 · 帅T本T", desc:"你帅起来连男生都自愧不如。你的衣柜里没有裙子只有卫衣，你的发型比男生还利落，你的气场能让方圆十米的女生都心跳加速。你是校园里最酷的存在，走过去的时候女生们都会小声说「好帅啊」。", traits:["帅到没朋友","攻气全开","男友力MAX","穿衣显瘦脱衣有肉"], dating:"你永远是主动的那一方，从表白到约会全你安排。你会霸道地帮对方拎包、开门、挡风。你的浪漫是默默做好一切，然后装作毫不在意。", catchphrase:"「站我后面」", advice:[{t:"温柔升级",d:"帅是你的标签，但偶尔展示温柔的一面会更有魅力。刚柔并济才是真正的帅。"},{t:"表达感情",d:"不需要永远保持酷酷的形象，偶尔说一句「我想你了」比沉默更有力量。"},{t:"接受被爱",d:"你习惯保护别人，但也要学会接受别人的关心。被照顾不是软弱，是信任。"}] },
+  { code:"GP♀", name:"纯P小甜心", emoji:"🎀", sub:"甜美型 · 软萌系", desc:"你甜起来连棉花糖都要拜你为师。你说话声音软软的，走路轻轻的，笑起来甜甜的。你是那种让人看了就想保护的存在，你的撒娇技术能让铁汉都化成绕指柔。你的日常就是嘤嘤嘤和抱抱。", traits:["软萌到犯规","撒娇满级","嘤嘤嘤专业户","甜美暴击"], dating:"你是恋爱中的小公主，喜欢被照顾被宠爱。你会用星星眼看着对方，会在冷的时候主动缩进对方怀里。你的每一句话都自带撒娇buff。", catchphrase:"「嘤嘤嘤～」「人家不要嘛～」", advice:[{t:"独立练习",d:"软萌是加分项，但也要有自己的主见。偶尔做一次决定，你会发现被尊重的感觉更棒。"},{t:"情绪表达",d:"不开心的时候直接说，不要用「哼」来暗示。你的另一半不是解谜大师。"},{t:"自信建设",d:"你值得被爱，不需要用撒娇来换取关注。真实的你，不需要滤镜也很可爱。"}] },
+  { code:"H·百变", name:"H型万能选手", emoji:"🔄", sub:"百变型 · 可攻可受", desc:"你是恋爱界的瑞士军刀——什么都能来。今天穿着卫衣帅到炸裂，明天穿着裙子美到窒息。你的另一半永远猜不透你今天是什么风格，这种百变感就是你的杀手锏。你的衣柜是男生和女生的衣服各占一半。", traits:["百变风格","可攻可受","时尚达人","性别流动"], dating:"恋爱中你没有固定角色，有时候霸道总裁，有时候小甜心。你的另一半经常需要重新认识你，但这种新鲜感让感情永远不腻。", catchphrase:"「看心情」", advice:[{t:"风格稳定",d:"百变是魅力，但偶尔给对方一个确定感。不是所有人都适应每天开盲盒的恋爱模式。"},{t:"自我认知",d:"了解自己在什么状态下最舒服，不要为了百变而百变。"},{t:"沟通频率",d:"风格切换时跟对方说一声，不然对方会以为你心情不好。"}] },
+  { code:"LC🍵", name:"绿茶本茶", emoji:"🍵", sub:"心机型 · 白莲花", desc:"你的演技堪比奥斯卡影后。你能在男生面前装柔弱，在女生面前装无辜。你的「我好笨哦」「我什么都不懂」说得炉火纯青，你的「我不是故意的」能让人信以为真。你是人畜无害的小白兔，但你的心眼比蜂窝煤还多。", traits:["演技满分","心机深沉","无辜表情大师","男性收割机"], dating:"你会在男生面前表现得楚楚可怜，会不经意地展示自己的脆弱。你的每一句话都经过精心设计，每一个表情都是计算好的。你的前任们至今还觉得你是好人。", catchphrase:"「我真的不是故意的～」「我好笨哦」", advice:[{t:"真诚修炼",d:"演技好是天赋，但真诚才是长久之道。不需要永远戴着面具。"},{t:"女性友谊",d:"女生之间的友谊比男生的追捧更有价值。不要为了男生失去闺蜜。"},{t:"自我价值",d:"你的价值不在于有多少男生喜欢你，而在于你是谁。"}] },
+  { code:"LS🌊", name:"蕾丝边文艺女青年", emoji:"📖", sub:"文艺型 · 诗意灵魂", desc:"你的灵魂住着一个诗人。你读波伏娃，听陈绮贞，看王家卫。你的爱情观是「寻找灵魂伴侣」，你觉得爱情不应该被性别定义。你的朋友圈充满了文艺气息，你的另一半必须跟你有精神共鸣。", traits:["文艺气质","灵魂至上","性别观念开放","精神追求者"], dating:"你的约会是逛书店和看展览，你的情话是引用诗歌。你不在乎对方的性别，只在乎灵魂是否契合。你觉得最浪漫的事是一起读一本书。", catchphrase:"「灵魂的共鸣比什么都重要」", advice:[{t:"接地气",d:"文艺是好事，但也要偶尔吃个火锅看个综艺。生活不只有诗和远方。"},{t:"表达直接",d:"不要用诗歌来暗示，直接说「我喜欢你」比引用一百句诗都管用。"},{t:"接受平凡",d:"不是每段感情都需要轰轰烈烈，平淡的陪伴也是一种浪漫。"}] },
+  { code:"ZQ🔥", name:"暴躁老姐", emoji:"🔥", sub:"强势型 · 怼人机器", desc:"你说话比刀子还锋利，怼人比相声还好笑。你的嘴巴已经超越了人类的极限，能用一句话让对方社死当场。你是正义的化身（自封的），任何看不惯的事你都要管。你是校园里的纪检委员，任何不正之风都逃不过你的眼睛。", traits:["怼人之王","正义感爆棚","嘴巴比脑子快","暴躁但可爱"], dating:"你会在约会时因为服务员态度不好而当场开怼。你的另一半经常需要拉住你说「算了算了」。你以为这是维护正义，其实你只是脾气大。", catchphrase:"「你说什么？再说一遍？」", advice:[{t:"情绪管理",d:"深呼吸，不值得为不重要的人生气。你的血压和你的另一半都需要你冷静。"},{t:"说话方式",d:"同样的意思换个说法效果可能完全不同。试着用建设性的方式表达不满。"},{t:"选择战场",d:"不是所有事都值得你去怼，学会区分哪些值得你花精力。"}] },
+  { code:"XN💔", name:"渣女本渣", emoji:"💔", sub:"海后型 · 鱼塘管理", desc:"你的鱼塘里养了二十条鱼，每条都觉得自己是唯一。你的时间管理能力让罗志祥都自愧不在。你擅长暧昧，擅长欲擒故纵，擅长让每个人都觉得你是真心的。你是恋爱界的快餐店——来者不拒，吃完就走。", traits:["鱼塘管理大师","暧昧不分对象","欲擒故纵高手","真心稀缺资源"], dating:"你手机里有三个微信，每个微信有不同的暧昧对象。你擅长在不同人面前扮演不同角色，你的演技足以拿金鸡奖。你的前任们至今还在你的鱼塘里游泳。", catchphrase:"「我们只是朋友」「你怎么这么敏感」", advice:[{t:"道德重启",d:"如果同时喜欢两个人，选第二个。因为如果真的喜欢第一个，就不会喜欢第二个。"},{t:"换位思考",d:"如果你的对象同时跟十个人暧昧，你会怎么想？己所不欲勿施于人。"},{t:"真诚练习",d:"试着对一个人认真，你会发现专一的快乐比暧昧的刺激更持久。"}] },
+  { code:"XJ🤗", name:"恋爱脑本脑", emoji:"💕", sub:"痴情型 · 全世界只有你", desc:"你的世界里只有一个人。你的朋友圈只有对方的照片，你的歌单只有情歌，你的话题只有「我对象」。你的朋友都嫌你烦了，你还在说「我对象怎样怎样」。你的恋爱脑已经占据了你99%的CPU。", traits:["恋爱脑满级","世界只有ta","朋友全是空气","甜蜜到齁"], dating:"你恨不得24小时粘着对方，消息必须秒回，电话必须接。你觉得世界上最浪漫的事就是跟对方在一起，哪怕什么都不做。你会在朋友圈每天发三条秀恩爱。", catchphrase:"「我对象说了……」", advice:[{t:"自我空间",d:"恋爱是生活的一部分，不是全部。保留自己的兴趣爱好和社交圈。"},{t:"朋友维护",d:"不要因为恋爱而忽略朋友，ta们在你单身的时候会是你的支撑。"},{t:"理性思考",d:"偶尔跳出来看看这段关系，是不是健康的、平等的、让你成长的。"}] },
+  { code:"LZ👑", name:"女王大人", emoji:"👑", sub:"霸道型 · 女王控", desc:"你天生就是当女王的料。你的气场两米八，你的决定不容质疑。你是恋爱中的主导方，从约会地点到吃什么全你说了算。你说往东没人敢往西，你说好看那就是好看。你的另一半是你的臣民，你是永远的女王。", traits:["气场全开","控制欲强","决策果断","不容置疑"], dating:"恋爱中你是绝对的主导方。你的另一半做什么都要先问你，你不同意就不行。你的浪漫是霸道地宣布「你是我的人」。", catchphrase:"「我说了算」「你敢？」", advice:[{t:"倾听他人",d:"偶尔听听对方的意见，集思广益才能统治更广阔的疆域嘛。"},{t:"放下控制",d:"不是所有事情都需要你来决定，学会信任和授权。"},{t:"柔软一面",d:"在亲近的人面前展示你的温柔，刚柔并济才是真正的强大。"}] },
+  { code:"NJ🎭", name:"戏精公主", emoji:"🎭", sub:"表演型 · 偶像剧女主", desc:"你的人生就是一部偶像剧，你是永远的女主角。别人一句话你能解读出八百个意思，一件小事你能演成年度大戏。你的表情包库存比微信官方还丰富，你的内心戏比电影院还精彩。你是行走的连续剧，随时随地都在上演。", traits:["内心戏影后","表情包大师","脑补能力满分","戏剧性人格"], dating:"你会因为对方没回消息而脑补出「ta是不是不爱我了→ta是不是有别人了→我要不要分手→不行我舍不得」的完整剧情。然后对方只是手机没电了。", catchphrase:"「你是不是不爱我了？」", advice:[{t:"减少脑补",d:"不是每件事都有深层含义，有时候对方没回消息真的只是在忙。"},{t:"情绪管理",d:"学会控制情绪的音量，不是所有事都值得你演一出大戏。"},{t:"真实表达",d:"与其脑补一百种可能，不如直接问一句。沟通比猜测有效一万倍。"}] },
+  { code:"YY🦉", name:"熬夜冠军小公主", emoji:"🦉", sub:"夜间型 · 猫头鹰", desc:"你的黑眼圈是你熬夜的勋章。你说过一万次「今晚一定早睡」，但每天凌晨三点你还在刷手机。你的床是你最亲密的敌人——你不想睡的时候它在诱惑你，你想睡的时候它又不让你睡。你是深夜的灵魂，白天的行尸走肉。", traits:["熬夜之王","早睡flag常立常倒","黑眼圈代言人","深夜活跃物种"], dating:"你的约会经常迟到，因为你前一天熬夜到凌晨四点。你会在深夜给对方发长篇大论的情感文字，然后第二天起来觉得自己有病。", catchphrase:"「今晚一定早睡（第108次）」", advice:[{t:"强制早睡",d:"今晚真的早点睡吧，手机设置11点自动变灰，物理强制。"},{t:"睡眠仪式",d:"睡前一小时不看屏幕，读本书或听轻音乐，给大脑一个关机信号。"},{t:"光照调节",d:"早上起来晒15分钟太阳，帮助调整生物钟。你的皮肤也需要休息。"}] },
+  { code:"MZ🛍️", name:"购物车女孩", emoji:"🛍️", sub:"消费型 · 买买买", desc:"你的购物车比你的人生规划还丰富。你的「加入购物车」技能已经满级，但「付款」技能还在新手村。你每天最大的乐趣就是逛淘宝和清空购物车（只清空不下单）。你的手机里有八个购物app，每个都有未付款的订单。", traits:["购物车收藏家","加购不买选手","种草机","快递站VIP"], dating:"你会在约会时逛商场，然后买一堆不需要的东西。你的另一半看到你的购物车会当场晕倒。你的浪漫是帮对方清空购物车（自己的）。", catchphrase:"「我就看看不买」「最后一个了真的」", advice:[{t:"理性消费",d:"加入购物车后等三天再决定，三天后还想买才是真的需要。"},{t:"财务规划",d:"每月设定消费预算，给自己一个「花钱许可证」，超了就不能再买。"},{t:"投资自己",d:"把购物的热情分一点点给学习和成长，这才是最值得的投资。"}] },
+  { code:"DM🌙", name:"深夜网抑云女主", emoji:"🌙", sub:"感性型 · 文艺女青年", desc:"每到深夜你就开始感伤，白天嘻嘻哈哈的你和深夜emo的你简直判若两人。你的收藏夹里全是情感语录，你的歌单分为「白天装没事」和「深夜暴风哭泣」两个模式。月亮一出来你就文思泉涌。", traits:["白天笑嘻嘻深夜哭唧唧","情感丰富","伤感文学女主","网易云VIP"], dating:"你的情绪随天气变化，晴天开心阴天忧郁雨天哭泣。你的另一半需要时刻准备纸巾和笑话。你会在深夜给对方发一堆伤感文字，然后第二天说「我昨天喝多了」。", catchphrase:"「月亮不睡我不睡」", advice:[{t:"早睡早起",d:"建议11点后关闭网易云和抖音情感频道，早睡早起才是治愈一切的良药。"},{t:"情绪出口",d:"把情绪转化为创作，写日记、画画、唱歌，都是比哭泣更好的释放方式。"},{t:"白天快乐",d:"允许自己在白天也感受快乐，不要只在深夜才打开情绪的阀门。"}] },
+  { code:"LH🦅", name:"独立女王不求人", emoji:"🦅", sub:"独立型 · 全能战士", desc:"你什么事都能自己搞定，修灯泡、搬重物、杀蟑螂，你是全能选手。你的独立程度让人怀疑你需不需要对象。你是自己的女王、自己的骑士、自己的英雄。你的人生格言：靠自己，最可靠。", traits:["独立自主","能力全面","不依赖他人","内心强大"], dating:"你不会撒娇不会示弱，你觉得那些都很做作。你的另一半觉得自己没有存在的必要，因为你什么都自己搞定了。你的浪漫是帮对方修电脑。", catchphrase:"「我自己来」「不用你帮忙」", advice:[{t:"接受帮助",d:"偶尔示弱也不丢人，让别人帮忙不代表你不行，只是代表你有社交能力。"},{t:"情感开放",d:"独立是好事，但也要允许别人走进你的世界。"},{t:"撒娇入门",d:"偶尔撒个娇不会怎样的，你的另一半会觉得自己被需要，这很重要。"}] },
+  { code:"TS🐶", name:"小奶狗学妹", emoji:"🐩", sub:"年下型 · 可爱系", desc:"你是校园里最可爱的存在。你笑起来有酒窝，说话声音软软的，撒娇起来让人心都化了。你崇拜你的另一半，觉得对方什么都是对的。你是恋爱中的学妹，永远在仰望你的学长/学姐。", traits:["可爱到犯规","崇拜感满满","依赖性极强","保护欲缺失"], dating:"你会用星星眼看着对方，觉得对方做什么都好帅/好美。你会主动给对方带早餐，会在对方考试前发加油信息。你的爱纯粹又温暖，就像小太阳。", catchphrase:"「学长/学姐好厉害！」", advice:[{t:"平等意识",d:"恋爱是平等的，不需要仰望任何人。你也有自己的闪光点，自信一点。"},{t:"独立发展",d:"不要把所有时间都围着对方转，你也有自己的学业和人生要经营。"},{t:"成长陪伴",d:"最好的关系是一起成长，而不是一个人拖着另一个人走。"}] },
+  { code:"NM🌡️", name:"中央空调女友", emoji:"🌡️", sub:"博爱型 · 暖气片", desc:"你对谁都好，好到让人分不清你到底是暖还是渣。你会给每个男生带早餐，会在每个男生难过的时候递纸巾，你会在每个男生的朋友圈下评论「加油哦」。你以为你是暖女，其实你是中央空调——暖所有人，凉了真心人。", traits:["博爱无差别","好人卡收集者","暧昧制造机","边界感模糊"], dating:"你对男朋友和对其他男生的态度一模一样，你男朋友问你「你对他是不是也这样」的时候，你诚实地说「是」，然后你就没有男朋友了。", catchphrase:"「我对朋友都这样啊」", advice:[{t:"边界意识",d:"对男朋友好和对朋友好要有区别，你需要学会划清界限。"},{t:"专一练习",d:"把你对所有人的好集中给一个人，你会发现效果好十倍。"},{t:"换位思考",d:"如果你男朋友对每个女生都这么好，你能接受吗？"}] },
+  { code:"ZP🐷", name:"精致懒猪女孩", emoji:"🐷", sub:"慵懒型 · 生活家", desc:"你又精致又懒，这个矛盾的组合在你身上完美体现。你会花两小时化一个看起来像没化妆的妆，然后穿着睡衣躺一天。你的外卖记录证明了你真的可以不出门活一个月。你的精致和懒形成了完美的平衡。", traits:["精致的懒","妆前妆后两个人","外卖之王","宅家小公主"], dating:"你的约会妆需要三个小时准备，但你约会的时候只想回家躺着。你的另一半觉得你像两个人——出门的时候是仙女，回家的时候是猪。", catchphrase:"「再躺五分钟」「今天不出门了」", advice:[{t:"出门走走",d:"偶尔出门晒晒太阳，阳光和新鲜空气是免费的护肤品。"},{t:"行动力提升",d:"精致不只是外表，把这种用心也放在事业和成长上。"},{t:"社交练习",d:"外卖小哥都认识你了，这说明你需要增加一些线下的社交活动。"}] },
+  { code:"XZ💫", name:"追星女孩", emoji:"💫", sub:"追星型 · 爱豆至上", desc:"你的生活90%围绕着你的爱豆。你的手机壁纸是爱豆，你的朋友圈是爱豆，你的话题是爱豆。你觉得没有人能比得上你的爱豆，你的理想型就是你的爱豆。你的另一半最大的情敌是一个永远不会见面的人。", traits:["爱豆至上","追星成瘾","现实恋爱困难","完美主义"], dating:"你会拿你的另一半跟你的爱豆比较，然后得出「还是爱豆好」的结论。你的另一半觉得自己永远比不上一个不存在的人。你的浪漫是一起去看演唱会。", catchphrase:"「我爱豆说了……」", advice:[{t:"现实回归",d:"爱豆是偶像，但身边的人才是真实的。不要因为追星而忽略了真正关心你的人。"},{t:"标准调整",d:"不要拿爱豆的标准来要求你的另一半，每个人都有自己的闪光点。"},{t:"兴趣拓展",d:"除了追星，也培养一些其他爱好。你的世界不应该只有一个人。"}] },
+  { code:"XD🐶", name:"人间鉴渣专家", emoji:"🔍", sub:"分析型 · 测谎仪", desc:"你鉴渣的能力比安检仪还准。对方一个眼神你就能判断出是不是渣男/渣女，一句话就能听出有没有问题。你的闺蜜找你看人比找算命的还准。你是恋爱界的福尔摩斯，任何心机在你面前都无所遁形。", traits:["鉴渣之王","人形测谎仪","火眼金睛","恋爱福尔摩斯"], dating:"你能在第一次约会就判断出对方是什么类型。你的分析能力让你的朋友都来找你看人，但你也因此很难完全信任一个人。", catchphrase:"「我早就看出来了」", advice:[{t:"给机会",d:"不是所有人都需要鉴别的对象，给真心的人一个机会。"},{t:"减少预判",d:"不要一开始就给每个人打分，有些人需要时间才能展现真实的自己。"},{t:"放松警惕",d:"偶尔放下你的雷达，享受一下被追的感觉，即使结果不完美也是经历。"}] },
+  { code:"ZM📺", name:"追剧上头小仙女", emoji:"📺", sub:"沉浸型 · 观剧者", desc:"你的日常就是追剧、讨论剧情、等更新的无限循环。你追过的剧比你谈过的恋爱多得多。你会为角色哭为角色笑，你的共情能力已经超越了屏幕的界限。你是行走的电视剧百科，任何剧情你都能聊。", traits:["追剧达人","剧情分析师","角色共情大师","更新等待者"], dating:"你会因为追剧而忘记约会，你会在约会时讨论剧情。你的另一半觉得自己跟电视剧抢不过。你的浪漫是一起追同一部剧。", catchphrase:"「等我看完这一集」", advice:[{t:"现实参与",d:"追剧是快乐的，但也别忘了现实生活也需要你亲自参与。"},{t:"时间管理",d:"设定每天的追剧时间上限，把省下来的时间用在自我成长上。"},{t:"创作输出",d:"把你的剧情分析写成文章或视频，把爱好变成作品。"}] }
+];
+
+// ==================== APP STATE ====================
+let state = {
+  gender: '',
+  age: '',
+  questions: [],
+  answers: [],
+  currentIdx: 0,
+  startTime: null,
+  timerInterval: null
+};
+
+// ==================== HELPERS ====================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showPage(name) {
+  ['home','demo','quiz','report'].forEach(p => {
+    document.getElementById('page-' + p).classList.toggle('hidden', p !== name);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ==================== DEMOGRAPHICS ====================
+function pickGender(el) {
+  document.querySelectorAll('.gender-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  state.gender = el.dataset.g;
+  checkStartReady();
+}
+
+function pickAge(el) {
+  document.querySelectorAll('.age-opt').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  state.age = el.dataset.a;
+  checkStartReady();
+}
+
+function checkStartReady() {
+  document.getElementById('btnStart').disabled = !state.gender;
+}
+
+// ==================== QUIZ ====================
+function startQuiz() {
+  if (!state.gender) return;
+  state.questions = shuffle(allQuestions).slice(0, 20);
+  state.answers = new Array(20).fill(-1);
+  state.currentIdx = 0;
+  state.startTime = Date.now();
+  showPage('quiz');
+  startTimer();
+  renderQuestion(false);
+}
+
+function startTimer() {
+  if (state.timerInterval) clearInterval(state.timerInterval);
+  state.timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('qTimer').textContent = m + ':' + s;
+  }, 1000);
+}
+
+function renderQuestion(animate) {
+  const q = state.questions[state.currentIdx];
+  const idx = state.currentIdx;
+  const labels = ['A','B','C','D'];
+
+  document.getElementById('qProgressText').textContent = `${idx + 1} / 20`;
+  document.getElementById('qProgressBar').style.width = `${((idx + 1) / 20) * 100}%`;
+  document.getElementById('qCategory').textContent = CATEGORIES[q.cat];
+  document.getElementById('qNumber').textContent = `第 ${idx + 1} 题`;
+  document.getElementById('qText').textContent = q.text;
+
+  const optArea = document.getElementById('qOptions');
+  optArea.innerHTML = '';
+  q.options.forEach((opt, i) => {
+    const div = document.createElement('div');
+    div.className = 'q-option' + (state.answers[idx] === i ? ' selected' : '');
+    div.innerHTML = `<span class="q-opt-key">${labels[i]}</span><span class="q-opt-text">${opt}</span>`;
+    div.onclick = () => selectAnswer(i);
+    optArea.appendChild(div);
+  });
+
+  document.getElementById('btnBack').disabled = idx === 0;
+
+  if (animate) {
+    const card = document.getElementById('quizCard');
+    card.classList.add('fade-in');
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        card.classList.remove('fade-in');
+      });
+    });
+  }
+}
+
+function selectAnswer(i) {
+  const idx = state.currentIdx;
+  state.answers[idx] = i;
+
+  // Highlight selected
+  const btns = document.querySelectorAll('.q-option');
+  btns.forEach((btn, j) => btn.classList.toggle('selected', j === i));
+
+  // Auto-advance after short delay
+  setTimeout(() => {
+    if (idx < 19) {
+      state.currentIdx++;
+      animateTransition();
+    } else {
+      // Last question - show report
+      clearInterval(state.timerInterval);
+      showReport();
+    }
+  }, 350);
+}
+
+function animateTransition() {
+  const card = document.getElementById('quizCard');
+  card.classList.add('fade-out');
+  setTimeout(() => {
+    renderQuestion(true);
+    card.classList.remove('fade-out');
+  }, 250);
+}
+
+function goBack() {
+  if (state.currentIdx > 0) {
+    state.currentIdx--;
+    const card = document.getElementById('quizCard');
+    card.style.transform = 'translateX(30px)';
+    card.style.opacity = '0';
+    setTimeout(() => {
+      renderQuestion(false);
+      card.style.transition = 'all 0.25s ease';
+      card.style.transform = 'translateX(0)';
+      card.style.opacity = '1';
+      setTimeout(() => { card.style.transition = ''; }, 300);
+    }, 150);
+  }
+}
+
+// ==================== REPORT ====================
+function showReport() {
+  const elapsed = Math.floor((Date.now() - state.startTime) / 1000);
+  const pool = state.gender === 'male' ? resultsMale : resultsFemale;
+  const result = pool[Math.floor(Math.random() * pool.length)];
+
+  // Generate dimension scores based on answers
+  const dims = generateDimensions();
+
+  const reportHTML = `
+    <!-- Hero -->
+    <div class="report-hero animate-in">
+      <div style="font-size:4em; margin-bottom:10px;">${result.emoji}</div>
+      <div class="report-type-code">${result.code}</div>
+      <div class="report-type-name">${result.name}</div>
+      <div class="report-type-sub">${result.sub}</div>
+      <div class="report-meta">
+        <span class="report-meta-item">👤 ${state.gender === 'male' ? '男' : '女'}</span>
+        <span class="report-meta-item">📅 ${state.age || '未填写'}</span>
+        <span class="report-meta-item">⏱️ 用时 ${Math.floor(elapsed/60)}分${elapsed%60}秒</span>
+        <span class="report-meta-item">📊 20题已完成</span>
+      </div>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="report-section animate-in delay-1">
+      <div class="section-title"><span class="s-icon" style="background:#eef2ff;color:#4f46e5">📊</span> 五维人格雷达</div>
+      <div class="radar-wrap">
+        <canvas id="radarCanvas" width="360" height="360"></canvas>
+      </div>
+      <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:12px;">
+        ${dims.map(d => `<span style="font-size:0.82em; color:var(--text-secondary)"><span style="color:${d.color}; font-weight:700">●</span> ${d.name} ${d.pct}%</span>`).join('')}
+      </div>
+    </div>
+
+    <!-- Dimension Bars -->
+    <div class="report-section animate-in delay-2">
+      <div class="section-title"><span class="s-icon" style="background:#ecfdf5;color:#059669">📈</span> 维度得分详情</div>
+      ${dims.map(d => `
+        <div class="dim-bar-group">
+          <div class="dim-bar-label">
+            <span class="dim-bar-name">${d.name}</span>
+            <span class="dim-bar-pct">${d.pct}%</span>
+          </div>
+          <div class="dim-bar-track">
+            <div class="dim-bar-fill" style="width:0%; background:${d.color}" data-width="${d.pct}%"></div>
+          </div>
+          <div class="dim-labels">
+            <span>${d.low}</span>
+            <span>${d.high}</span>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Personality Description -->
+    <div class="report-section animate-in delay-3">
+      <div class="section-title"><span class="s-icon" style="background:#fef3c7;color:#d97706">🧬</span> 恋爱人格画像</div>
+      <p class="desc-text">${result.desc}</p>
+      <div style="margin-top:20px">
+        <div style="font-weight:600; font-size:0.9em; margin-bottom:10px; color:#4f46e5">✦ 人格标签</div>
+        <div class="tag-group">
+          ${result.traits.map(s => `<span class="tag tag-strength">${s}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Dating Style -->
+    <div class="report-section animate-in delay-4">
+      <div class="section-title"><span class="s-icon" style="background:#eff6ff;color:#2563eb">💕</span> 恋爱行为模式</div>
+      <p class="desc-text">${result.dating}</p>
+      <div style="margin-top:20px; padding:16px 20px; background:linear-gradient(135deg,#f0f0ff,#fff5f5); border-radius:10px; border-left:4px solid #7c3aed;">
+        <div style="font-size:0.82em; color:var(--text-muted); margin-bottom:4px;">经典口头禅</div>
+        <div style="font-size:1.1em; font-weight:600; color:#7c3aed; font-style:italic;">${result.catchphrase}</div>
+      </div>
+    </div>
+
+    <!-- Growth Advice -->
+    <div class="report-section">
+      <div class="section-title"><span class="s-icon" style="background:#f0fdf4;color:#16a34a">💡</span> 个性化成长建议</div>
+      ${result.advice.map(a => `
+        <div class="advice-card">
+          <div class="advice-icon">📌</div>
+          <div class="advice-content">
+            <div class="advice-title">${a.t}</div>
+            <div class="advice-desc">${a.d}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="report-section" style="background:var(--bg); border-style:dashed;">
+      <div style="text-align:center; font-size:0.85em; color:var(--text-muted);">
+        <div style="font-size:1.4em; margin-bottom:8px;">⚠️</div>
+        <strong>免责声明</strong><br>
+        本测评仅供娱乐参考，基于随机题目和趣味性人格匹配，不构成任何专业恋爱建议。<br>
+        测评结果纯属搞笑，请勿对号入座。如有雷同，纯属巧合（大概吧）。
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="report-actions">
+      <button class="btn-outline" onclick="restartTest()">重新测评</button>
+      <button class="btn-outline" onclick="window.print()">打印报告</button>
+      <button class="btn-primary" onclick="shareReport()">分享结果</button>
+    </div>
+  `;
+
+  document.getElementById('page-report').innerHTML = reportHTML;
+  showPage('report');
+
+  // Animate dimension bars
+  setTimeout(() => {
+    document.querySelectorAll('.dim-bar-fill').forEach(bar => {
+      bar.style.width = bar.dataset.width;
+    });
+  }, 300);
+
+  // Draw radar chart
+  setTimeout(() => drawRadar(dims), 500);
+}
+
+function generateDimensions() {
+  // Generate pseudo-random dimension scores based on answers
+  const seed = state.answers.reduce((a, b) => a + b, 0);
+  const base = [65, 55, 70, 60, 50];
+  return [
+    { name: '主动度', pct: clamp(base[0] + (state.answers[0] || 0) * 8 - (state.answers[3] || 0) * 5 + seed % 10, 15, 95), color: '#4f46e5', low: '被动等待', high: '主动出击' },
+    { name: '粘人指数', pct: clamp(base[1] + (state.answers[5] || 0) * 7 - (state.answers[8] || 0) * 4 + seed % 12, 15, 95), color: '#7c3aed', low: '独立自主', high: '形影不离' },
+    { name: '浪漫值', pct: clamp(base[2] + (state.answers[2] || 0) * 6 - (state.answers[7] || 0) * 5 + seed % 8, 15, 95), color: '#ec4899', low: '钢铁直球', high: '浪漫满屋' },
+    { name: '安全感', pct: clamp(base[3] + (state.answers[1] || 0) * 9 - (state.answers[4] || 0) * 6 + seed % 11, 15, 95), color: '#059669', low: '疑神疑鬼', high: '信任满分' },
+    { name: '醋意值', pct: clamp(base[4] + (state.answers[6] || 0) * 7 - (state.answers[9] || 0) * 4 + seed % 9, 15, 95), color: '#d97706', low: '大度从容', high: '醋坛本坛' }
+  ];
+}
+
+function clamp(v, min, max) { return Math.max(min, Math.min(max, Math.round(v))); }
+
+function drawRadar(dims) {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  const cx = W / 2, cy = H / 2;
+  const R = Math.min(cx, cy) - 50;
+  const N = 5;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Grid rings
+  for (let r = 1; r <= 5; r++) {
+    const rr = R * r / 5;
+    ctx.beginPath();
+    for (let i = 0; i <= N; i++) {
+      const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
+      const x = cx + rr * Math.cos(angle);
+      const y = cy + rr * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // Axis lines + labels
+  const labels = ['主动度', '粘人指数', '浪漫值', '安全感', '醋意值'];
+  for (let i = 0; i < N; i++) {
+    const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
+    const x = cx + R * Math.cos(angle);
+    const y = cy + R * Math.sin(angle);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(x, y);
+    ctx.strokeStyle = '#e2e8f0';
+    ctx.stroke();
+
+    // Label
+    const lx = cx + (R + 25) * Math.cos(angle);
+    const ly = cy + (R + 25) * Math.sin(angle);
+    ctx.fillStyle = '#64748b';
+    ctx.font = '12px -apple-system, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(labels[i], lx, ly);
+  }
+
+  // Data polygon
+  const values = dims.map(d => d.pct / 100);
+  ctx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const idx = i % N;
+    const angle = (Math.PI * 2 * idx / N) - Math.PI / 2;
+    const x = cx + R * values[idx] * Math.cos(angle);
+    const y = cy + R * values[idx] * Math.sin(angle);
+    idx === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+  }
+  ctx.fillStyle = 'rgba(79, 70, 229, 0.15)';
+  ctx.fill();
+  ctx.strokeStyle = '#4f46e5';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // Data dots
+  for (let i = 0; i < N; i++) {
+    const angle = (Math.PI * 2 * i / N) - Math.PI / 2;
+    const x = cx + R * values[i] * Math.cos(angle);
+    const y = cy + R * values[i] * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 5, 0, Math.PI * 2);
+    ctx.fillStyle = '#4f46e5';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+}
+
+function restartTest() {
+  state = { gender: '', age: '', questions: [], answers: [], currentIdx: 0, startTime: null, timerInterval: null };
+  document.querySelectorAll('.gender-opt, .age-opt').forEach(e => e.classList.remove('active'));
+  document.getElementById('btnStart').disabled = true;
+  showPage('home');
+}
+
+function shareReport() {
+  const text = `我在 PersonaLab 完成了人格测评，快来看看你是什么人格类型！`;
+  if (navigator.share) {
+    navigator.share({ title: 'PersonaLab 人格测评', text, url: location.href });
+  } else {
+    navigator.clipboard.writeText(text + ' ' + location.href).then(() => {
+      alert('链接已复制到剪贴板！');
+    });
+  }
+}
+</script>
+</body>
+</html>
