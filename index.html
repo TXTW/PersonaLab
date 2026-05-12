@@ -788,8 +788,8 @@
       <h1>发现你的隐藏人格</h1>
       <p>基于多维度人格模型，通过 20 道精选题目，深度解析你的性格密码，生成专属人格测评报告。</p>
       <div class="hero-stats">
+        <div class="hero-stat"><div class="hero-stat-num" id="participantCount">-</div><div class="hero-stat-label">参与测评</div></div>
         <div class="hero-stat"><div class="hero-stat-num">100+</div><div class="hero-stat-label">专业题库</div></div>
-        <div class="hero-stat"><div class="hero-stat-num">5</div><div class="hero-stat-label">测评维度</div></div>
         <div class="hero-stat"><div class="hero-stat-num">40+</div><div class="hero-stat-label">人格类型</div></div>
         <div class="hero-stat"><div class="hero-stat-num">3min</div><div class="hero-stat-label">预计用时</div></div>
       </div>
@@ -1400,6 +1400,79 @@ function shareReport() {
     });
   }
 }
+
+// ==================== PARTICIPANT COUNTER ====================
+// 基数 103 万，从 2026-05-13 起每天不匀速增长约 3000 人
+(function initCounter() {
+  const BASE_DATE = new Date('2026-05-13T00:00:00+08:00').getTime();
+  const BASE_COUNT = 1030000;
+  const DAILY_TARGET = 3000;
+
+  // 确定性伪随机：同一天同一小时结果固定
+  function seededRand(seed) {
+    let x = Math.sin(seed * 9301 + 49297) * 49297;
+    return x - Math.floor(x);
+  }
+
+  function getCount() {
+    const now = Date.now();
+    const elapsed = now - BASE_DATE;
+    if (elapsed < 0) return BASE_COUNT;
+
+    const totalDays = elapsed / 86400000;
+    const fullDays = Math.floor(totalDays);
+    const frac = totalDays - fullDays;
+
+    // 每天的基础增长量在 2500~3500 之间波动（以天为周期的正弦 + 伪随机）
+    let cumulative = 0;
+    for (let d = 0; d < fullDays; d++) {
+      const wave = Math.sin(d * 0.7) * 300;           // 平滑波动 ±300
+      const noise = (seededRand(d) - 0.5) * 400;      // 随机抖动 ±200
+      cumulative += DAILY_TARGET + wave + noise;
+    }
+
+    // 当天已过的部分：按小时不匀速分配
+    const todayBase = DAILY_TARGET + Math.sin(fullDays * 0.7) * 300 + (seededRand(fullDays) - 0.5) * 400;
+    const hourSeed = fullDays * 100;
+    // 把一天分成 24 个不等份
+    const weights = [];
+    let wSum = 0;
+    for (let h = 0; h < 24; h++) {
+      const w = 0.5 + seededRand(hourSeed + h);
+      weights.push(w);
+      wSum += w;
+    }
+    // 计算当前小时累计占比
+    const currentHour = new Date(now).getHours() + new Date(now).getMinutes() / 60;
+    let passed = 0;
+    for (let h = 0; h < 24; h++) {
+      if (h < Math.floor(currentHour)) {
+        passed += weights[h];
+      } else if (h === Math.floor(currentHour)) {
+        passed += weights[h] * (currentHour - Math.floor(currentHour));
+      }
+    }
+    cumulative += todayBase * (passed / wSum);
+
+    return Math.floor(BASE_COUNT + cumulative);
+  }
+
+  function formatCount(n) {
+    if (n >= 10000) {
+      const wan = n / 10000;
+      return (Math.floor(wan * 10) / 10).toFixed(1).replace(/\.0$/, '') + '万+';
+    }
+    return n.toLocaleString() + '+';
+  }
+
+  function update() {
+    const el = document.getElementById('participantCount');
+    if (el) el.textContent = formatCount(getCount());
+  }
+
+  update();
+  setInterval(update, 60000); // 每分钟刷新一次
+})();
 </script>
 </body>
 </html>
